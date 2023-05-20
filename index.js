@@ -8,8 +8,6 @@ app.use(express.json());
 app.use(cors());
 const jwt = require("jsonwebtoken")
 const bodyparser = require("body-parser")
-const path = require('path');
-
 
 // Signup Code
 app.post("/signup", async(req, res)=>{
@@ -54,7 +52,6 @@ app.post("/login", async (req, res) => {
                 }
             }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "1h"})
             res.json({accessToken, email, name})
-            // console.log({accessToken});
         }else{
             res.json("notexist");
         }
@@ -89,17 +86,10 @@ function authenticateToken(req, res, next) {
                 password: password
             }
         }
-        console.log(req.user);
         next()
     })
 }
 
-app.use(express.static(path.join(__dirname, "./client/build")));
-
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "./client/build/index.html"))
-})
-
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
     console.log(`Now listening on port ${port}`);
 })
